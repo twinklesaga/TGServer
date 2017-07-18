@@ -1,10 +1,10 @@
 package Server
 
 import (
-	"net"
-	"fmt"
-	"time"
 	"bufio"
+	"fmt"
+	"net"
+	"time"
 )
 
 type Entity struct {

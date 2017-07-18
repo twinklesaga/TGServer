@@ -1,8 +1,8 @@
 package Server
 
 import (
-	"net"
 	"fmt"
+	"net"
 )
 
 type PacketFunc func(entity *Entity, packet *Packet) error
@@ -15,7 +15,7 @@ type Context struct {
 func NewContext(address string) *Context {
 
 	return &Context{address: address,
-		funcMap:             make(map[Command]PacketFunc)}
+		funcMap: make(map[Command]PacketFunc)}
 }
 
 func (ctx *Context) Run() error {

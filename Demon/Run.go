@@ -1,8 +1,8 @@
 package main
 
 import (
-	"worldserver/Server"
 	"fmt"
+	"TGServer/Server"
 )
 
 func main() {
@@ -22,7 +22,3 @@ func Echo(entity *Server.Entity, packet *Server.Packet) error {
 
 	return nil
 }
-
-
-
-
