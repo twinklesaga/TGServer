@@ -1,14 +1,14 @@
 <component name="libraryTable">
   <library name="GOPATH &lt;worldserver&gt;">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../.." />
-      <root url="file://$PROJECT_DIR$/../../../ImagineNation" />
-      <root url="file://$PROJECT_DIR$/../../../twinkle" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../ImagineNation" />
+      <root url="file://$PROJECT_DIR$/../twinkle" />
     </CLASSES>
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../.." />
-      <root url="file://$PROJECT_DIR$/../../../ImagineNation" />
-      <root url="file://$PROJECT_DIR$/../../../twinkle" />
+      <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../ImagineNation" />
+      <root url="file://$PROJECT_DIR$/../twinkle" />
     </SOURCES>
     <excluded>
       <root url="file://$PROJECT_DIR$" />
