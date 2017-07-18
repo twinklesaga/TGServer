@@ -4,51 +4,49 @@ import (
 	"bufio"
 	"fmt"
 	"net"
-	"time"
+	"io"
 )
 
 type Entity struct {
+	id  uint64
 	ctx  *Context
 	conn net.Conn
 }
 
-func NewEntity(ctx *Context, conn net.Conn) *Entity {
+func NewEntity(id uint64 , ctx *Context, conn net.Conn) Entity {
 
-	return &Entity{ctx: ctx, conn: conn}
+	return Entity{id: id , ctx: ctx, conn: conn}
 }
 
 func (entity *Entity) Run() {
 
 	reader := bufio.NewReader(entity.conn)
 
+	defer entity.conn.Close()
 	for {
-
-		read, err := reader.ReadString('\n')
+		var p Packet
+		err := p.Read(reader)
 
 		if err != nil {
-			fmt.Println(err)
-
+			if err == io.EOF {
+				entity.ctx.disconnect <- entity.id
+				break
+			} else {
+				entity.ctx.disconnect <- entity.id
+				fmt.Println(err)
+				break
+			}
 		} else {
-			fmt.Println(read)
-
-			//if read >= 12 {
-			//	p , _:= GetPacket(packet)
-
 			fmt.Println("Process")
-			fmt.Println(read)
-			//	entity.Process(p)
-			//}
+			entity.Process(&p)
 		}
-		time.Sleep(100000000000)
 	}
 }
 
 func (entity *Entity) Process(packet *Packet) {
 
 	if packet != nil {
-
-		f, err := entity.ctx.GetCmdFunc(packet.Cmd)
-
+		f, err := entity.ctx.GetCmdFunc(packet.H.Cmd)
 		if err == nil {
 			f(entity, packet)
 		}
@@ -56,6 +54,6 @@ func (entity *Entity) Process(packet *Packet) {
 }
 
 func (entity *Entity) Send(packet *Packet) error {
-	_, err := entity.conn.Write(packet.Bytes())
-	return err
+
+	return packet.Write(entity.conn)
 }

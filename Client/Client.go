@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"TGServer/Server"
+	"time"
 )
 
 func main() {
@@ -20,22 +21,43 @@ func main() {
 	}
 	defer conn.Close()
 
-	p := Server.MakePacket(0, 0xFFFF, 0x01010101, []byte("Test"))
 
-	fmt.Println(p.Print())
+	quit := make (chan bool)
 
-	_, err = conn.Write([]byte("dddddddddd\n"))
-	if err != nil {
-		fmt.Println(err)
+	go ClientRead(quit , conn)
+
+	Loop: for {
+		var cmd , param string
+		fmt.Print("입력:")
+		n ,_ := fmt.Scanln(&cmd , &param)
+		switch cmd {
+		case "0":
+			if n > 1 {
+				p := Server.MakePacket(0, 0, 0, []byte(param))
+				p.Write(conn)
+
+				time.Sleep(2 * time.Second)
+			}
+		case "Q":
+			fmt.Println("insert Q")
+			quit <- true
+			fmt.Println("insert Q 2")
+			break Loop
+		}
 	}
 
-	fmt.Println("read")
+}
 
-	reply := make([]byte, 1024)
-
-	_, err = conn.Read(reply)
-
-	rp, err := Server.GetPacket(reply)
-
-	fmt.Println(string(rp.Body[:]))
+func ClientRead(quit chan bool , conn net.Conn) {
+	for {
+		select {
+		case <-quit:
+			fmt.Println("Quit Client")
+			return
+		default:
+			var rP Server.Packet
+			rP.Read(conn)
+			fmt.Println(string(rP.Body[:]))
+		}
+	}
 }

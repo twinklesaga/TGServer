@@ -14,8 +14,15 @@ func main() {
 }
 
 func Echo(entity *Server.Entity, packet *Server.Packet) error {
-
 	fmt.Println("Echo")
+
+	entity.Send(packet)
+	return nil
+}
+
+func Ping(entity *Server.Entity, packet *Server.Packet) error {
+
+	fmt.Println("Pong")
 	fmt.Println(packet.Body)
 
 	entity.Send(packet)
